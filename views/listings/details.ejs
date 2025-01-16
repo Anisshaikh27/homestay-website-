@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details</title>
+</head>
+<body>
+    <header>
+        <div id="headerdiv">
+            <span> home </span>
+        </div>
+    </header>
+    <main>
+        <div id="maindiv">
+            <h2><%= result.title %></h2><br>
+            <p><%= result.description %></p><br>
+            <img src="<%= result.image.url %>" alt="<%= result.title %>" /><br>
+            <p>Price: $<%= result.price %></p><br>
+            <p>Location: <%= result.location %></p><br>
+            <p>Country: <%= result.country %></p><br>
+           
+        </div>
+    </main>
+    <footer>
+        <div id="footerdiv">    
+            <span> footer </span>
+        </div>
+    </footer>
+</body>
+</html>
