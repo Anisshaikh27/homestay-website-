@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Details</title>
-</head>
+<% layout('./layouts/boilerplate') %>
 <body>
     <header>
         <div id="headerdiv">
-            <span> home </span>
+            <a class="btn  btn-outline-danger" href="/home/edit/:id" role="button"><i class="fa-light fa-pen"></i></a>
         </div>
     </header>
     <main>
@@ -22,10 +16,4 @@
            
         </div>
     </main>
-    <footer>
-        <div id="footerdiv">    
-            <span> footer </span>
-        </div>
-    </footer>
 </body>
-</html>

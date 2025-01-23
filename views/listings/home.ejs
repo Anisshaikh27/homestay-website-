@@ -1,37 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HOME PAGE</title>
-</head>
+<% layout('./layouts/boilerplate') %>
 <body>
     <header>
         <div id="headerdiv">
-            <span> home </span> <button><a href="/home/add">add new data</a></button>
+            <!-- <span> home </span>  -->
+            <!-- <button><a href="/home/add">add new data</a></button> -->
         </div>
     </header>
     <main>
-        <div id="maindiv">
-          <% listings.forEach((listing) => { %>
-            <div class="list"></div>
-            <h2><%= listing.title %></h2>
-            <p><%= listing.description %></p>
-            <img src="<%= listing.image.url %>" alt="<%= listing.title %>" />
-            <p>Price: $<%= listing.price %></p>
-            <p>Location: <%= listing.location %></p>
-            <p>Country: <%= listing.country %></p>
-            <button onclick="window.location.href='/home/details/<%= listing._id %>'">details</button>  
-            <button onclick="window.location.href='/home/edit/<%= listing._id %>'">edit</button>
-            <button onclick="window.location.href='/home/delete/<%= listing._id %>'">delete</button>      
-            <% }) %>
+        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1 row-cols-xs-1">
+        <% listings.forEach((listing) => { %>
+            <a href="/home/details/<%= listing._id %>" class="listing-underlines">
+                <div class="card ">
+                    <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>" style="height: 20rem;">
+                    <div class="card-body">
+                      <h5 class="card-title"><strong><%= listing.title %></strong></h5>
+                      <span class="card-text"><%= listing.location %></span>,
+                      <span class="card-text"><%= listing.country %></span>
+                      <p class="card-text"> <%= listing.description%></p>
+                      <p class="card-text " style="font-style: italic;"> Price: $<%= listing.price %>/night</p>   
+                    </div>
+                </div>
+            </a>
+        <% }) %>
         </div>
     </main>
-    <footer>
-        <div id="footerdiv">
-            <span> footer </span>
-        </div>
-    </footer>
+ 
     <!-- <script>
         const deleteButtons = document.querySelectorAll('.delete-btn');
         deleteButtons.forEach(btn => {
@@ -52,4 +45,3 @@
 
     </script> -->
 </body>
-</html>

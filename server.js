@@ -4,6 +4,8 @@ const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 
+
+
 // connecting to db
 const { connectDB, deleteData, insertdata } = require('./init/connectDB');
 
@@ -19,11 +21,19 @@ const Listing = require('./models/listing');
 
 
 // middlewares
-
+// ORDER MATTERSS IN MIDDLEWARE
+// // requiring  ejs mate engine
+const ejsMate = require('ejs-mate');
+app.engine('ejs', ejsMate);
 
 // setting view engine and path
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+
+// serving static files
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 // to get req res params 
 app.use(express.urlencoded({ extended: true }));
@@ -44,10 +54,13 @@ app.get('/home', async (req, res) => {
 
 
 // for specific details page 
+// http://localhost:8080/home/details/6791f35ded139052510d6192
 app.get('/home/details/:id', async (req, res) => {
 
     let id = req.params.id; 
+    console.log(id);
     let result = await Listing.findById(id);
+    console.log(result);
     res.render('./listings/details', { result });
 
 });

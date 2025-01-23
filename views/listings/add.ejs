@@ -1,40 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADD NEW DATA</title>
-</head>
+<% layout('./layouts/boilerplate') %>
 <body>
-    <header>
-    </header>
     <main>
-        <div id="maindiv">
+      <h3><strong> New Listing </strong></h3>
+      <div class="row mt-5">
+        <div class="col-8 offset-2">
             <form action="/home/add" method="POST">
-                <label for="title">Title:</label>
-                <input type="text" id="title" name="title"><br>
+                <div class="form-group">
+                    <label for="title" class="form-label">Title:</label>
+                    <input class="form-control" type="text" id="title" name="title"><br>
+                </div>
 
-                <label for="description">Description:</label>
-                <input type="text" id="description" name="description"><br>
+                <div class="form-group">
+                    <label for="description" class="form-label">Description:</label>
+                    <input class="form-control" type="text" id="description" name="description"><br>
+                </div>
+                
+                <div class="form-group">
+                    <label for="image" class="form-label">Image:</label>
+                    <input class="form-control" type="url" id="image" name="image"><br>
+                </div>
 
-                <label for="image">Image:</label>
-                <input type="url" id="image" name="image"><br>
+              
+               <div class="row">
+                <div class="form-group col-2">
+                    <label for="price" class="form-label">Price:</label>
+                    <input class="form-control" type="number" id="price" name="price"><br>
+                </div>
 
-                <label for="price">Price:</label>
-                <input type="number" id="price" name="price"><br>
+                <div class="form-group col-6">
+                    <label for="location" class="form-label">Location:</label>
+                    <input class="form-control" type="text" id="location" name="location"><br>
+                </div>
 
-                <label for="location">Location:</label>
-                <input type="text" id="location" name="location"><br>
+                <div class="form-group col-4">
+                    <label for="country" class="form-label">Country:</label>
+                    <input class="form-control" type="text" id="country" name="country"><br>
+                </div>
 
-                <label for="country">Country:</label>
-                <input type="text" id="country" name="country"><br>
+               </div>
+                <input class="btn btn-success" ="submit" value="Submit">    
 
-                <input type="submit" value="Submit">
             </form>
+            </div>
         </div>
-    </main>
-    <footer>
-    </footer>
-    
+    </main>   
 </body>
-</html>
+            
