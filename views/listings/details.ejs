@@ -1,15 +1,27 @@
 <% layout('./layouts/boilerplate') %>
+
+<style>
+    main{
+        justify-content: center !important;
+
+    }
+    img{
+        border-radius: 5rem;
+        padding: 2rem;
+        /* animations */
+    }
+</style>
 <body>
-    <header>
-        <div id="headerdiv">
-            <a class="btn  btn-outline-danger" href="/home/edit/:id" role="button"><i class="fa-light fa-pen"></i></a>
+    <header >
+        <div id="headerdiv" class="d-flex justify-content-end pt-3">
+            <a class="btn  btn-outline-danger " href="/home/edit/<%= result._id %>" role="button" style="border-width: 2px;">Edit</a>
         </div>
     </header>
     <main>
-        <div id="maindiv">
-            <h2><%= result.title %></h2><br>
+        <div id="maindiv justify-content-center">
+            <h2><strong><%= result.title %></strong></h2><br>
             <p><%= result.description %></p><br>
-            <img src="<%= result.image.url %>" alt="<%= result.title %>" /><br>
+            <img src="<%= result.image.url %>"  alt="<%= result.title %>" /><br>
             <p>Price: $<%= result.price %></p><br>
             <p>Location: <%= result.location %></p><br>
             <p>Country: <%= result.country %></p><br>

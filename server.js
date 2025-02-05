@@ -42,7 +42,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routing
 
 // for home page
-app.get('/home', async (req, res) => {
+app.get(['/home' , '/'], async (req, res) => {
     try {
         const listings = await Listing.find({});
         res.render('./listings/home', { listings });
