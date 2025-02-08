@@ -1,19 +1,24 @@
 body{
-    background-color: red;
+    /* background-color: red; */
     color: black;
 }
 
 /* navbar */
-.navbar {
+.navbar{
     height: 5rem;
-    background-color: white !important;
-    
+    /* background-color: rgba(78, 90, 7, 0.436) !important; */
+    /* should not be transparent */
+    /* opacity: 0 !important; */
+   
+    background-color: #499ed7 !important;
+
+      
 }
 
 /* icon */
 .fa-airbnb {
     font-size: 3rem;
-    color: red;
+    color: white;
 }
 
 /* nav links */
@@ -26,7 +31,7 @@ body{
 /* footer */
 
 footer{
-    background-color: black;
+    background-color: #AE76A6 !important;
     color: white;
     text-align: center;
    
@@ -62,6 +67,7 @@ f-info-links{
 .card {
     border: none !important;
     margin-bottom: 2rem;
+    ;
 }
 
 .card-img-top{
@@ -79,6 +85,22 @@ f-info-links{
 .card-text{
     font-weight: 400 !important;
 }
+.card img {
+    opacity:1;
+}
+
+.card img:hover {
+    opacity:0.5;
+    transition: opacity 0.5s ease-in-out;
+}
+.card {
+    margin-top: 20px;
+    margin-left: 0%;
+  }
+
+.card-body{
+    margin: 3px 3px 3px 3px;
+}
 
 /* goggle font */
 body{
@@ -94,14 +116,6 @@ body{
     text-decoration: none !important;
 }
 
-.card img {
-    opacity:1;
-}
-
-.card img:hover {
-    opacity:0.5;
-    transition: opacity 0.5s ease-in-out;
-}
 
 
 

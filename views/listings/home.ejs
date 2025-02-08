@@ -1,16 +1,11 @@
 <% layout('./layouts/boilerplate') %>
 <body>
-    <header>
-        <div id="headerdiv">
-            <!-- <span> home </span>  -->
-            <!-- <button><a href="/home/add">add new data</a></button> -->
-        </div>
-    </header>
+
     <main>
         <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1 row-cols-xs-1">
         <% listings.forEach((listing) => { %>
             <a href="/home/details/<%= listing._id %>" class="listing-underlines">
-                <div class="card ">
+                <div class="card  ">
                     <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>" style="height: 20rem;">
                     <div class="card-body">
                       <h5 class="card-title"><strong><%= listing.title %></strong></h5>

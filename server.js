@@ -115,6 +115,13 @@ app.get('/home/delete/:id', async (req, res) => {
     }
 });
 
+
+// server side error handling middleware
+
+app.use((err,req,res,next)=>{
+    res.send("something went wrong bro!!!");
+})
+
 // Start server on 8080
 app.listen(8080, () => {
     console.log('Server is running on port 8080');
