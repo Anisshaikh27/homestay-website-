@@ -19,6 +19,15 @@ const { connectDB, deleteData, insertdata } = require('./init/connectDB');
 // importing models
 const Listing = require('./models/listing');
 
+// import wrapAsync function
+const wrapAsync = require('./utils/wrapAsyncFunction');
+
+// importing ExpressError class for custom error handling
+const ExpressError = require('./utils/ExpressError');
+
+// importing listingschemavalidation object of joi for schema validation
+const listingSchemaValidation  = require('./schema'); 
+
 
 // middlewares
 // ORDER MATTERSS IN MIDDLEWARE
@@ -38,88 +47,112 @@ app.use(express.static(path.join(__dirname, 'public')));
 // to get req res params 
 app.use(express.urlencoded({ extended: true }));
 
-
+// validation middleware
+const schemavalidation = (req,res,next)=>{
+    const { error, value } = listingSchemaValidation.validate(req.body);
+    if (error) {
+        throw new ExpressError(400, error.message);
+    }else{
+        next();
+    }
+}
 // Routing
 
 // for home page
-app.get(['/home' , '/'], async (req, res) => {
-    try {
+app.get(['/home' , '/'], wrapAsync( async (req, res) => {
+    
         const listings = await Listing.find({});
         res.render('./listings/home', { listings });
-    } catch (error) {
-        console.error('Error fetching listings:', error);
-        res.status(500).send('Error fetching listings');
-    }
-});
+}));
 
 
 // for specific details page 
 // http://localhost:8080/home/details/6791f35ded139052510d6192
-app.get('/home/details/:id', async (req, res) => {
-
+app.get('/home/details/:id', wrapAsync(async (req, res) => {
+    if (!req.params.id) {
+        throw new ExpressError(404, 'Listing not found ,bad request');
+    }
     let id = req.params.id; 
-    console.log(id);
+    // console.log(id);
     let result = await Listing.findById(id);
-    console.log(result);
+    // console.log(result);
     res.render('./listings/details', { result });
 
-});
+}));
 
 // for edit details 
 
-app.get('/home/edit/:id', async(req,res)=>{
+app.get('/home/edit/:id', wrapAsync(async(req,res)=>{
+    if (!req.params.id) {
+        throw new ExpressError(404, 'Listing not found ,bad request');
+    }
     let id = req.params.id;
     let result = await Listing.findById(id);
-    console.log(result);   
+    // console.log(result);   
     res.render('./listings/editdetails', {result});
 
-})
+}));
 
 // now updating the details
 
-app.post('/home/edit/:id', async(req,res)=>{
-   console.log(req.body);
+app.post('/home/edit/:id',schemavalidation, wrapAsync(async(req,res)=>{
+//    console.log(req.body);
+//    console.log(listingSchemaValidation);
+   const { error, value } = listingSchemaValidation.validate(req.body);
+   if (error) {
+       throw new ExpressError(400, error.message);
+   }
+   if (!req.params.id) {
+       throw new ExpressError(404, 'Listing not found ,bad request');
+   }
    let id = req.params.id;
    let {title,description,price,location,country} = req.body;
    await Listing.findByIdAndUpdate(req.params.id,{title:title,description:description,price:price,location:location,country:country},{runValidators:true});   
    res.redirect('/home');
-});
+}));
 
 
 // for adding new data 
 
-app.get('/home/add', (req, res) => {
+app.get('/home/add', wrapAsync((req, res) => {
     res.render('./listings/add');
-});
+}));
 
-app.post('/home/add', async (req, res) => {
-    console.log(req.body);
-    let { title, description, image, price, location, country } = req.body;
-    let newListing = new Listing({ title, description, image: { url: image }, price, location, country });
-    await newListing.save();
-    res.redirect('/home');
-});
+app.post('/home/add',schemavalidation, wrapAsync( async (req, res) => {
+    
+        // console.log(req.body);
+        // console.log(listingSchemaValidation);
+
+        let { title, description, image, price, location, country } = req.body;
+        let newListing = new Listing({ title, description, image: { url: image }, price, location, country });
+        await newListing.save();
+        res.redirect('/home');
+    
+}));
 
 // for deleting data 
-//Delete Route
+//Delete Route (admin only functionality)
 
-app.get('/home/delete/:id', async (req, res) => {
-    try {
+app.get('/home/delete/:id', wrapAsync(async (req, res) => {
+        if (!req.params.id) {
+            throw new ExpressError(404, 'Listing not found ,bad request');
+        }
         const listingId = req.params.id;
         await Listing.findByIdAndDelete(listingId);
         res.status(200).redirect("/home");
-        
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error deleting listing');
-    }
-});
 
+}));
+
+// handling other routes
+app.all('*', (req, res, next) => {
+    next(new ExpressError( 404 , 'Page Not Found'));
+});
 
 // server side error handling middleware
 
 app.use((err,req,res,next)=>{
-    res.send("something went wrong bro!!!");
+    let {statusCode = 500, message = "something went wrong"} = err;
+    res.status(statusCode).render('./listings/error', {error: err});
 })
 
 // Start server on 8080
