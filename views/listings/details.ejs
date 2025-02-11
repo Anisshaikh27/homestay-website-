@@ -13,8 +13,14 @@
 </style>
 <body>
     <header >
-        <div id="headerdiv" class="d-flex justify-content-end pt-3">
-            <a class="btn  btn-outline-danger " href="/home/edit/<%= result._id %>" role="button" style="border-width: 2px;">Edit</a>
+        <div id="headerdiv" class="d-flex justify-content-end pt-3 gap-2">
+            <a class="btn  btn-outline-secondary " href="/home/edit/<%= result._id %>" role="button" style="border-width: 2px;">Edit</a>
+            <a class="btn  btn-outline-danger " href="/home/delete/<%= result._id %>" role="button" style="border-width: 2px;">Delete</a>
+            <!-- Review Button: Triggers the modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                Write a Review
+            </button>
+            <a class="btn  btn-outline-primary " href="/home" role="button" style="border-width: 2px;">Back</a>
         </div>
     </header>
     <main>
@@ -22,10 +28,34 @@
             <h2><strong><%= result.title %></strong></h2><br>
             <p><%= result.description %></p><br>
             <img src="<%= result.image.url %>"  alt="<%= result.title %>" /><br>
-            <p>Price: $<%= result.price %></p><br>
-            <p>Location: <%= result.location %></p><br>
-            <p>Country: <%= result.country %></p><br>
+            <p>Price: $<%= result.price %></p>
+            <p>Location: <%= result.location %></p>
+            <p>Country: <%= result.country %></p>
+
+            <!-- reviews -->
+              <!-- Modal Structure -->
+              <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                  <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="reviewModalLabel">Write a Review</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+
+                    <!-- Modal Body -->
+                    <div class="modal-body">
+                        <%- include('../includes/review-form', { id : result._id }) %>
+                      <!-- <iframe src="review-form.ejs" width="100%" height="400" style="border: none;"></iframe> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+
            
         </div>
     </main>
+ 
 </body>

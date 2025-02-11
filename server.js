@@ -18,6 +18,7 @@ const { connectDB, deleteData, insertdata } = require('./init/connectDB');
 
 // importing models
 const Listing = require('./models/listing');
+const Review = require('./models/reviews'); 
 
 // import wrapAsync function
 const wrapAsync = require('./utils/wrapAsyncFunction');
@@ -142,6 +143,25 @@ app.get('/home/delete/:id', wrapAsync(async (req, res) => {
         res.status(200).redirect("/home");
 
 }));
+
+// post request on review form submission
+
+app.post('/home/details/:id/reviews', wrapAsync(async (req, res) => {
+    if (!req.params.id) {
+        throw new ExpressError(404, 'Listing not found ,bad request');
+    }
+    // console.log(req.body);
+    let id = req.params.id;
+    let {reviewRating,reviewText} = req.body;
+
+    let newReview = new Review({body:reviewText,rating:reviewRating});
+    await newReview.save();
+    await Listing.findByIdAndUpdate(id,{$push:{reviews:newReview._id}});
+    console.log('review added successfully');
+    res.redirect(`/home/details/${id}`);
+
+}));
+
 
 // handling other routes
 app.all('*', (req, res, next) => {
