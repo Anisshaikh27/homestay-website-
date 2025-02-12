@@ -4,8 +4,6 @@ const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 
-
-
 // connecting to db
 const { connectDB, deleteData, insertdata } = require('./init/connectDB');
 
@@ -157,11 +155,12 @@ app.get('/home/delete/:id', wrapAsync(async (req, res) => {
             throw new ExpressError(404, 'Listing not found ,bad request');
         }
         const listingId = req.params.id;
-        await Listing.findByIdAndDelete(listingId);
-        res.status(200).redirect("/home");
-
+        let result = await Listing.findByIdAndDelete(listingId);
+        //mongoose query middleware gets automatically triggered now
+        console.log(result);
+        res.redirect('/home');   
 }));
-
+  
 // post request on review form submission
 
 app.post('/home/details/:id/reviews',reviewschemavalidation,wrapAsync(async (req, res) => {
