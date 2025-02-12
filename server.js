@@ -12,7 +12,7 @@ const { connectDB, deleteData, insertdata } = require('./init/connectDB');
 // Connect to DB and initialize data
 (async () => {
     await connectDB();
-    await deleteData();
+    // await deleteData();
     await insertdata();
 })();
 
@@ -26,8 +26,10 @@ const wrapAsync = require('./utils/wrapAsyncFunction');
 // importing ExpressError class for custom error handling
 const ExpressError = require('./utils/ExpressError');
 
-// importing listingschemavalidation object of joi for schema validation
-const listingSchemaValidation  = require('./schema'); 
+// importing listingschemavalidation object of joi for schema validation on server side
+const listingSchemaValidation  = require('./schemavalidation'); 
+// importing reviewsSchemavalidation object of joi for schema validation on server side
+const reviewsSchemavalidation = require('./schemavalidation');
 
 
 // middlewares
@@ -48,7 +50,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // to get req res params 
 app.use(express.urlencoded({ extended: true }));
 
-// validation middleware
+// validation middlewares
+    //for listing schema 
 const schemavalidation = (req,res,next)=>{
     const { error, value } = listingSchemaValidation.validate(req.body);
     if (error) {
@@ -57,6 +60,21 @@ const schemavalidation = (req,res,next)=>{
         next();
     }
 }
+
+    //for review schema
+const reviewschemavalidation = (req,res,next)=>{
+    // console.log(req.body);
+    const body = req.body.reviewText;
+    const rating = req.body.reviewRating;
+
+    const { error, value } = reviewsSchemavalidation.validate({body,rating});
+    if (error) {
+        throw new ExpressError(400, error.message);
+    }else{
+        next();
+    }
+}
+
 // Routing
 
 // for home page
@@ -75,7 +93,7 @@ app.get('/home/details/:id', wrapAsync(async (req, res) => {
     }
     let id = req.params.id; 
     // console.log(id);
-    let result = await Listing.findById(id);
+    let result = await Listing.findById(id).populate('reviews'); //populate methods retrives data from reviews collection based on object id 
     // console.log(result);
     res.render('./listings/details', { result });
 
@@ -146,7 +164,7 @@ app.get('/home/delete/:id', wrapAsync(async (req, res) => {
 
 // post request on review form submission
 
-app.post('/home/details/:id/reviews', wrapAsync(async (req, res) => {
+app.post('/home/details/:id/reviews',reviewschemavalidation,wrapAsync(async (req, res) => {
     if (!req.params.id) {
         throw new ExpressError(404, 'Listing not found ,bad request');
     }

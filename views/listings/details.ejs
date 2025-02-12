@@ -10,6 +10,7 @@
         padding: 2rem;
         /* animations */
     }
+
 </style>
 <body>
     <header >
@@ -24,14 +25,27 @@
         </div>
     </header>
     <main>
-        <div id="maindiv justify-content-center">
+        <div id="maindiv" class=" align-items-center">
             <h2><strong><%= result.title %></strong></h2><br>
-            <p><%= result.description %></p><br>
-            <img src="<%= result.image.url %>"  alt="<%= result.title %>" /><br>
-            <p>Price: $<%= result.price %></p>
-            <p>Location: <%= result.location %></p>
-            <p>Country: <%= result.country %></p>
-
+            <div class="container">
+              <div class="row">
+                  <!-- Image Section -->
+                  <div class="image-div col-md-6">
+                      <img src="<%= result.image.url %>" alt="<%= result.title %>" class="img-fluid">
+                  </div>
+          
+                  <!-- Description Section -->
+                  <div class="description-div col-md-6">
+                      <p><%= result.description %></p>
+                        <p>Rating: average rating here </p>
+                        <p>Price: $<%= result.price %></p>
+                        <p>Location: <%= result.location %></p>
+                        <p>Country: <%= result.country %></p>
+                    
+                  </div>
+              </div>
+          </div>
+            
             <!-- reviews -->
               <!-- Modal Structure -->
               <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
@@ -54,7 +68,33 @@
                 </div>
               </div>
 
-           
+        </div>
+        <hr>
+        <div class="reviews">
+          <div class="reviews">
+            <h3><i>Reviews</i></h3>
+            <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 row-cols-xs-1">
+                <% 
+                if (!result.reviews || result.reviews.length === 0) { 
+                %>
+                    <p>No reviews yet</p>
+                <% 
+                } else { 
+                    result.reviews.forEach((review) => { 
+                %>
+                    <div class="card mb-3">
+                        <div class="card-body bg-light">
+                            <h5 class="card-title"><strong>Rating: <%= review.rating %></strong></h5>
+                            <p class="card-text"><%= review.body %></p>
+                            <p class="card-text italic"><%= review.createdAt.toDateString() %></p>
+                        </div>
+                    </div>
+                <%
+                    }); 
+                } 
+                %>
+            </div>
+          </div>
         </div>
     </main>
  
