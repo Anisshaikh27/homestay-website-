@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 
 const path = require('path');
-const mongoose = require('mongoose');
 
 // connecting to db
 const { connectDB, deleteData, insertdata } = require('./init/connectDB');
@@ -10,24 +9,12 @@ const { connectDB, deleteData, insertdata } = require('./init/connectDB');
 // Connect to DB and initialize data
 (async () => {
     await connectDB();
-    // await deleteData();
+    await deleteData();
     await insertdata();
 })();
 
-// importing models
-const Listing = require('./models/listing');
-const Review = require('./models/reviews'); 
-
-// import wrapAsync function
-const wrapAsync = require('./utils/wrapAsyncFunction');
-
 // importing ExpressError class for custom error handling
 const ExpressError = require('./utils/ExpressError');
-
-// importing listingschemavalidation object of joi for schema validation on server side
-const listingSchemaValidation  = require('./schemavalidation'); 
-// importing reviewsSchemavalidation object of joi for schema validation on server side
-const reviewsSchemavalidation = require('./schemavalidation');
 
 
 // middlewares
@@ -44,140 +31,54 @@ app.set('views', path.join(__dirname, 'views'));
 // serving static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 // to get req res params 
 app.use(express.urlencoded({ extended: true }));
+// Parse JSON bodies (for API clients)
+app.use(express.json());
 
-// validation middlewares
-    //for listing schema 
-const schemavalidation = (req,res,next)=>{
-    const { error, value } = listingSchemaValidation.validate(req.body);
-    if (error) {
-        throw new ExpressError(400, error.message);
-    }else{
-        next();
+//express sessions
+const session = require('express-session');
+
+const sessionOptions= {
+    secret: 'mysupersecretcode',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
     }
-}
+};
 
-    //for review schema
-const reviewschemavalidation = (req,res,next)=>{
-    // console.log(req.body);
-    const body = req.body.reviewText;
-    const rating = req.body.reviewRating;
+app.use(session(sessionOptions));
 
-    const { error, value } = reviewsSchemavalidation.validate({body,rating});
-    if (error) {
-        throw new ExpressError(400, error.message);
-    }else{
-        next();
-    }
-}
+// passport module for authentication
+
+//import mongoose models 
+const User = require('./models/user');
+// Initialize Passport
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Configure Passport-Local
+passport.use(new LocalStrategy(User.authenticate()));
+
+// Serialize and deserialize user
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 // Routing
-
-// for home page
-app.get(['/home' , '/'], wrapAsync( async (req, res) => {
-    
-        const listings = await Listing.find({});
-        res.render('./listings/home', { listings });
-}));
-
-
-// for specific details page 
-// http://localhost:8080/home/details/6791f35ded139052510d6192
-app.get('/home/details/:id', wrapAsync(async (req, res) => {
-    if (!req.params.id) {
-        throw new ExpressError(404, 'Listing not found ,bad request');
-    }
-    let id = req.params.id; 
-    // console.log(id);
-    let result = await Listing.findById(id).populate('reviews'); //populate methods retrives data from reviews collection based on object id 
-    // console.log(result);
-    res.render('./listings/details', { result });
-
-}));
-
-// for edit details 
-
-app.get('/home/edit/:id', wrapAsync(async(req,res)=>{
-    if (!req.params.id) {
-        throw new ExpressError(404, 'Listing not found ,bad request');
-    }
-    let id = req.params.id;
-    let result = await Listing.findById(id);
-    // console.log(result);   
-    res.render('./listings/editdetails', {result});
-
-}));
-
-// now updating the details
-
-app.post('/home/edit/:id',schemavalidation, wrapAsync(async(req,res)=>{
-//    console.log(req.body);
-//    console.log(listingSchemaValidation);
-   const { error, value } = listingSchemaValidation.validate(req.body);
-   if (error) {
-       throw new ExpressError(400, error.message);
-   }
-   if (!req.params.id) {
-       throw new ExpressError(404, 'Listing not found ,bad request');
-   }
-   let id = req.params.id;
-   let {title,description,price,location,country} = req.body;
-   await Listing.findByIdAndUpdate(req.params.id,{title:title,description:description,price:price,location:location,country:country},{runValidators:true});   
-   res.redirect('/home');
-}));
-
-
-// for adding new data 
-
-app.get('/home/add', wrapAsync((req, res) => {
-    res.render('./listings/add');
-}));
-
-app.post('/home/add',schemavalidation, wrapAsync( async (req, res) => {
-    
-        // console.log(req.body);
-        // console.log(listingSchemaValidation);
-
-        let { title, description, image, price, location, country } = req.body;
-        let newListing = new Listing({ title, description, image: { url: image }, price, location, country });
-        await newListing.save();
-        res.redirect('/home');
-    
-}));
-
-// for deleting data 
-//Delete Route (admin only functionality)
-
-app.get('/home/delete/:id', wrapAsync(async (req, res) => {
-        if (!req.params.id) {
-            throw new ExpressError(404, 'Listing not found ,bad request');
-        }
-        const listingId = req.params.id;
-        let result = await Listing.findByIdAndDelete(listingId);
-        //mongoose query middleware gets automatically triggered now
-        console.log(result);
-        res.redirect('/home');   
-}));
-  
-// post request on review form submission
-
-app.post('/home/details/:id/reviews',reviewschemavalidation,wrapAsync(async (req, res) => {
-    if (!req.params.id) {
-        throw new ExpressError(404, 'Listing not found ,bad request');
-    }
-    // console.log(req.body);
-    let id = req.params.id;
-    let {reviewRating,reviewText} = req.body;
-
-    let newReview = new Review({body:reviewText,rating:reviewRating});
-    await newReview.save();
-    await Listing.findByIdAndUpdate(id,{$push:{reviews:newReview._id}});
-    console.log('review added successfully');
-    res.redirect(`/home/details/${id}`);
-
-}));
+    //for lising routes
+app.use(['/home','/'], require('./routes/listing'));
+    //for review routes
+app.use('/home/details/:id', require('./routes/review'));
+    //for user authentication routes
+app.use('/auth', require('./routes/auth'));
 
 
 // handling other routes

@@ -14,6 +14,7 @@ async function connectDB() {
 // importing models
 const Listing = require('../models/listing');
 const data = require('./TouristPlacesDataset');
+const Review = require('../models/reviews');
 
 
 // inserting data into db using function
@@ -34,6 +35,7 @@ async function insertdata() {
  async function deleteData() {
     try {
         await Listing.deleteMany({});
+        await Review.deleteMany({});
         console.log('Previous data deleted successfully.');
     } catch (error) {
         console.error('Error deleting previous data:', error);

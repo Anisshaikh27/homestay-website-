@@ -1,0 +1,25 @@
+<% layout('./layouts/boilerplate') %>
+
+
+<body>
+    <div class="row col-8 offset-2">
+        <h1>Log In</h1>
+        <form action="/auth/login" method="POST" class="needs-validation" novalidate>
+            <div class="form-group">
+                <label for="username">username:</label>
+                <input class="form-control" type="username" id="username" name="username" required><br>
+                <div class="invalid-feedback">
+                    Please choose a valid email
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input class="form-control" type="password" id="password" name="password" required><br>
+                <div class="invalid-feedback">
+                    Please choose a password
+                </div>
+            </div>
+            <button class="btn btn-outline-danger" type="submit">Log In</button>
+        </form>
+    </div>
+</body>
