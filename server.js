@@ -52,6 +52,17 @@ const sessionOptions= {
 
 app.use(session(sessionOptions));
 
+// flash messages
+const flash = require('connect-flash');
+app.use(flash());
+// Middleware to make flash messages accessible in templates
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    // console.log(res);
+    next();
+});
+
 // passport module for authentication
 
 //import mongoose models 

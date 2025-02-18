@@ -42,7 +42,7 @@ router.post('/reviews',validateReviewSchema ,wrapAsync(async (req, res) => {
     let newReview = new Review({body:reviewText,rating:reviewRating});
     await newReview.save();
     await Listing.findByIdAndUpdate(id,{$push:{reviews:newReview._id}});
-    console.log('review added successfully');
+    req.flash('success', 'Review added successfully');
     res.redirect(`/home/details/${id}`);
 
 }));

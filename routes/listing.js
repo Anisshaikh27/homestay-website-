@@ -39,27 +39,39 @@ router.get(['/'], wrapAsync( async (req, res) => {
 // for specific details page 
 // http://localhost:8080/home/details/6791f35ded139052510d6192
 router.get('/details/:id', wrapAsync(async (req, res) => {
-if (!req.params.id) {
-    throw new ExpressError(404, 'Listing not found ,bad request');
-}
-let id = req.params.id; 
-// console.log(id);
-let result = await Listing.findById(id).populate('reviews'); //populate methods retrives data from reviews collection based on object id 
-// console.log(result);
-res.render('./listings/details', { result });
-
+    if (!req.params.id) {
+        throw new ExpressError(404, 'Listing not found ,bad request');
+    }
+    let id = req.params.id; 
+    // console.log(id);
+    let result = await Listing.findById(id).populate('reviews'); //populate methods retrives data from reviews collection based on object id 
+    // console.log(result);
+    if (!result){
+        req.flash('error','listing not found ')
+        res.redirect('/home');
+    }
+    else{
+    res.render('./listings/details', { result });
+    }
 }));
 
 // for edit details 
 
 router.get('/edit/:id', wrapAsync(async(req,res)=>{
-if (!req.params.id) {
-    throw new ExpressError(404, 'Listing not found ,bad request');
-}
-let id = req.params.id;
-let result = await Listing.findById(id);
+    if (!req.params.id) {
+        throw new ExpressError(404, 'Listing not found ,bad request');
+    }
+    let id = req.params.id;
+    let result = await Listing.findById(id);
     // console.log(result);  
-res.render('./listings/editdetails', {result});
+    if (!result){
+        req.flash('error','listing not found ')
+        res.redirect('/home');
+    }
+    else{
+        res.render('./listings/editdetails', {result});
+    }
+
 
 }));
 
@@ -68,18 +80,19 @@ res.render('./listings/editdetails', {result});
 
 router.post('/edit/:id',validateListingSchema, wrapAsync(async(req,res)=>{
 
-// console.log(req.body);
-const { error, value } = listingSchemaValidation.validate(req.body);
-if (error) {
-   throw new ExpressError(400, error.message);
-}
-if (!req.params.id) {
-   throw new ExpressError(404, 'Listing not found ,bad request');
-}
+        // console.log(req.body);
+        const { error, value } = listingSchemaValidation.validate(req.body);
+        if (error) {
+        throw new ExpressError(400, error.message);
+        }
+        if (!req.params.id) {
+        throw new ExpressError(404, 'Listing not found ,bad request');
+        }
 
-let {title,description,price,location,country} = req.body;
-await Listing.findByIdAndUpdate(req.params.id,{title:title,description:description,price:price,location:location,country:country},{runValidators:true});   
-res.redirect('/home');
+        let {title,description,price,location,country} = req.body;
+        await Listing.findByIdAndUpdate(req.params.id,{title:title,description:description,price:price,location:location,country:country},{runValidators:true}); 
+        req.flash('success', 'Listing updated successfully');
+        res.redirect('/home');
 }));
 
 
@@ -97,6 +110,7 @@ router.post('/add',validateListingSchema, wrapAsync( async (req, res) => {
     let { title, description, image, price, location, country } = req.body;
     let newListing = new Listing({ title, description, image: { url: image }, price, location, country });
     await newListing.save();
+    req.flash('success', 'Listing added successfully');
     res.redirect('/home');
 
 }));
@@ -111,8 +125,15 @@ router.get('/delete/:id', wrapAsync(async (req, res) => {
     const listingId = req.params.id;
     let result = await Listing.findByIdAndDelete(listingId);
     //mongoose query middleware gets automatically triggered now
-    console.log(result);
-    res.redirect('/home');   
+    if (!result){
+        req.flash('error','listing not found ')
+        res.redirect('/home');
+    }
+    else{
+        req.flash('success', 'Listing deleted successfully');
+        res.redirect('/home');   
+    }
+    
 }));
 
 
