@@ -55,13 +55,6 @@ app.use(session(sessionOptions));
 // flash messages
 const flash = require('connect-flash');
 app.use(flash());
-// Middleware to make flash messages accessible in templates
-app.use((req, res, next) => {
-    res.locals.success = req.flash('success');
-    res.locals.error = req.flash('error');
-    // console.log(res);
-    next();
-});
 
 // passport module for authentication
 
@@ -71,16 +64,29 @@ const User = require('./models/user');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
-// Initialize Passport
+
+// Initialize Passport (This is correct)
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Configure Passport-Local
-passport.use(new LocalStrategy(User.authenticate()));
+// Configure Passport-Local (CORRECT WAY with passport-local-mongoose)
+passport.use(User.createStrategy()); // Use createStrategy() - NOT new LocalStrategy()
 
-// Serialize and deserialize user
+// Serialize and deserialize user (This is correct with passport-local-mongoose)
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+
+// Middleware to make things accessible in ejs templates
+app.use((req, res, next) => {
+    // For flash messages
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+
+    // For current user
+    res.locals.currentUser = req.user;
+    next();
+});
 
 
 // Routing

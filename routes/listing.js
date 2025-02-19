@@ -25,6 +25,30 @@ const validateListingSchema = (req,res,next)=> {
     }
 }
 
+//check if logged in middleware 
+const isLoggedIn = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+
+    let pucchi = req.originalUrl;
+
+    // Check if req.user exists before attempting to set properties
+    if (req.user) { // This condition is crucial
+        req.user.lastRequestedUrl = pucchi;
+        console.log("Pucchi stored in req.user:", pucchi);
+    } else {
+        // If req.user is undefined, it means the user is not logged in.
+        // You can store the pucchi in the session here, but it will be lost after the authentication process.
+        // The best approach is to store it in session before authentication, then retrieve it after authentication.
+        req.session.pucchiBeforeAuth = pucchi; // Store in session BEFORE authentication
+    }
+
+    req.flash('error', 'Please login first');
+    res.redirect('/auth/login');
+};
+
+
 
 // Routing
 // for home page
@@ -51,13 +75,13 @@ router.get('/details/:id', wrapAsync(async (req, res) => {
         res.redirect('/home');
     }
     else{
-    res.render('./listings/details', { result });
+        res.render('./listings/details', { result });
     }
 }));
 
 // for edit details 
 
-router.get('/edit/:id', wrapAsync(async(req,res)=>{
+router.get('/edit/:id',isLoggedIn,wrapAsync(async(req,res)=>{
     if (!req.params.id) {
         throw new ExpressError(404, 'Listing not found ,bad request');
     }
@@ -83,10 +107,10 @@ router.post('/edit/:id',validateListingSchema, wrapAsync(async(req,res)=>{
         // console.log(req.body);
         const { error, value } = listingSchemaValidation.validate(req.body);
         if (error) {
-        throw new ExpressError(400, error.message);
+            throw new ExpressError(400, error.message);
         }
         if (!req.params.id) {
-        throw new ExpressError(404, 'Listing not found ,bad request');
+            throw new ExpressError(404, 'Listing not found ,bad request');
         }
 
         let {title,description,price,location,country} = req.body;
@@ -98,8 +122,9 @@ router.post('/edit/:id',validateListingSchema, wrapAsync(async(req,res)=>{
 
 // for adding new data 
 
-router.get('/add', wrapAsync((req, res) => {
-res.render('./listings/add');
+router.get('/add',isLoggedIn, wrapAsync((req, res) => {
+        res.render('./listings/add');
+
 }));
 
 router.post('/add',validateListingSchema, wrapAsync( async (req, res) => {
@@ -118,7 +143,7 @@ router.post('/add',validateListingSchema, wrapAsync( async (req, res) => {
 // for deleting data 
 //Delete Route (admin only functionality)
 
-router.get('/delete/:id', wrapAsync(async (req, res) => {
+router.get('/delete/:id',isLoggedIn, wrapAsync(async (req, res) => {
     if (!req.params.id) {
         throw new ExpressError(404, 'Listing not found ,bad request');
     }

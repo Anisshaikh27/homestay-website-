@@ -19,4 +19,10 @@ const reviewsSchemavalidation= Joi.object({
         rating : Joi.number().required().min(1).max(5)
 });
 
-module.exports = {listingSchemaValidation,reviewsSchemavalidation};
+const userSchemaValidation = Joi.object({
+    username: Joi.string().required(),
+    email: Joi.string().required(),
+    password: Joi.string().required()
+});
+
+module.exports = {listingSchemaValidation,reviewsSchemavalidation,userSchemaValidation};
