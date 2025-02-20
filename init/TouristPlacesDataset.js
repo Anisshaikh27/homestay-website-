@@ -1,4 +1,4 @@
-const data = [
+let data = [
     {
       title: "Cozy Beachfront Cottage",
       description:

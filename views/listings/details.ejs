@@ -21,8 +21,10 @@
 <body>
     <header >
         <div id="headerdiv" class="d-flex justify-content-end pt-3 gap-2">
-            <a class="btn  btn-outline-secondary " href="/home/edit/<%= result._id %>" role="button" style="border-width: 2px;">Edit</a>
-            <a class="btn  btn-outline-danger " href="/home/delete/<%= result._id %>" role="button" style="border-width: 2px;">Delete</a>
+            <% if(currentUser && currentUser._id.equals(result.owner._id)) { %>
+                <a class="btn  btn-outline-secondary " href="/home/edit/<%= result._id %>" role="button" style="border-width: 2px;">Edit</a>
+                <a class="btn  btn-outline-danger " href="/home/delete/<%= result._id %>" role="button" style="border-width: 2px;">Delete</a>
+            <%  } %>
             <!-- Review Button: Triggers the modal -->
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reviewModal">
                 Write a Review
@@ -43,6 +45,7 @@
                   <!-- Description Section -->
                   <div class="description-div col-md-6">
                       <p><%= result.description %></p>
+                      <p>Owner: <%= result.owner.username %></p>
                         <p>Rating: average rating here </p>
                         <p>Price: $<%= result.price %></p>
                         <p>Location: <%= result.location %></p>

@@ -68,7 +68,7 @@ router.get('/details/:id', wrapAsync(async (req, res) => {
     }
     let id = req.params.id; 
     // console.log(id);
-    let result = await Listing.findById(id).populate('reviews'); //populate methods retrives data from reviews collection based on object id 
+    let result = await Listing.findById(id).populate('reviews').populate('owner'); //populate methods retrives data from reviews collection based on object id 
     // console.log(result);
     if (!result){
         req.flash('error','listing not found ')

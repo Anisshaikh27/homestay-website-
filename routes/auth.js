@@ -55,7 +55,7 @@ router.get('/login', (req, res) => {
 
 // Login route (SIMPLIFIED and CORRECTED)
 router.post('/login',
-    (req, next) => { // Middleware to retrieve before authentication
+    (req,res,next) => { // Middleware to retrieve before authentication
         const pucchi = req.session.pucchiBeforeAuth;
         req.pucchi = pucchi; // Put it on req so the next middleware can access it.
         next();

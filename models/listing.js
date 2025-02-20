@@ -18,7 +18,12 @@ const listingSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Review'
         }
-    ] 
+
+    ],
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    } 
 });
 
 // Mongoose middleware: after a listing is deleted, delete its associated reviews.

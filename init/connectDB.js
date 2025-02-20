@@ -13,14 +13,15 @@ async function connectDB() {
 
 // importing models
 const Listing = require('../models/listing');
-const data = require('./TouristPlacesDataset');
+let data = require('./TouristPlacesDataset');
 const Review = require('../models/reviews');
 
 
 // inserting data into db using function
 async function insertdata() {
-
     try {
+        // mapping an owner to each listing
+        data = data.map((listing) => ({...listing, owner :'67b4bcefc092b1ea23d9d9ef'})); 
         await Listing.insertMany(data);
         console.log('Sample data inserted successfully.');
     
@@ -28,8 +29,6 @@ async function insertdata() {
         console.error('Error generating sample data:', error);
         }
 }; 
-
-
 
 // deleting previous data
  async function deleteData() {
