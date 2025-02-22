@@ -62,8 +62,6 @@ app.use(flash());
 const User = require('./models/user');
 // Initialize Passport
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-
 
 // Initialize Passport (This is correct)
 app.use(passport.initialize());
@@ -85,16 +83,20 @@ app.use((req, res, next) => {
 
     // For current user
     res.locals.currentUser = req.user;
+    console.log(res.locals.currentUser);
     next();
 });
 
 
 // Routing
-    //for lising routes
+    
+//for lising routes
 app.use(['/home','/'], require('./routes/listing'));
-    //for review routes
+    
+//for review routes
 app.use('/home/details/:id', require('./routes/review'));
-    //for user authentication routes
+    
+//for user authentication routes
 app.use('/auth', require('./routes/auth'));
 
 

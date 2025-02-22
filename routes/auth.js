@@ -71,7 +71,7 @@ router.post('/login',
 
       const pucchi = req.pucchi; // Retrieve from req object
       delete req.session.pucchiBeforeAuth; // Clear from session
-      console.log("Pucchi retrieved (after auth and before redirect):", pucchi);
+
 
       if (pucchi) {
           res.redirect(pucchi);

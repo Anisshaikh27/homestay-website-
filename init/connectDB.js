@@ -14,7 +14,7 @@ async function connectDB() {
 // importing models
 const Listing = require('../models/listing');
 let data = require('./TouristPlacesDataset');
-const Review = require('../models/reviews');
+const Review = require('../models/review');
 
 
 // inserting data into db using function

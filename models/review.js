@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const reviewSchema = new mongoose.Schema({
+
     body: {
         type: String,
         required: true
@@ -10,6 +11,11 @@ const reviewSchema = new mongoose.Schema({
         min: 1,
         max: 5,
         required: true
+    },
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        
     },
 
     createdAt: {type: Date, default: Date.now}
