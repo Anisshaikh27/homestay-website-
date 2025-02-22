@@ -1,9 +1,11 @@
 const express = require('express');
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+
 const wrapAsync = require('../utils/wrapAsyncFunction');
 const User = require('../models/user'); // Import the User model
 const { userSchemaValidation } = require('../utils/schemavalidation');
+const { logicAfterLogin, logoutUser, getLoginForm, addNewUser, getRegisterForm } = require('../controllers/auth');
+const { get } = require('mongoose');
 
 const router = express.Router();
 
@@ -21,37 +23,12 @@ const validateUserSchema = (req,res,next)=> {
 
 
 // Registration route
-router.get('/register', (req, res) => {
-    res.render('./auth/register.ejs');
-});
+router.get('/register', getRegisterForm );
 
-router.post('/register',validateUserSchema, wrapAsync(async (req, res) => {
-        console.log(req.body);
-        const { username, password, email } = req.body;
-        const user = new User({ username, email });
-        let result =   await User.register(user, password);
-         // if user not register send flash message
-        if(!result){
-            req.flash('error', 'User not registered');
-            return res.redirect('/auth/register');
-        }
-
-        req.logIn(user,(err)=> {
-            if(err){
-                next(err);
-            }
-            req.flash('success', 'User registered successfully');
-            res.redirect('/home');
-            
-        })
-       
-        
-}));
+router.post('/register',validateUserSchema, wrapAsync(addNewUser));
 
 // Login route
-router.get('/login', (req, res) => {
-    res.render('./auth/login.ejs');
-});
+router.get('/login', getLoginForm);
 
 // Login route (SIMPLIFIED and CORRECTED)
 router.post('/login',
@@ -65,31 +42,10 @@ router.post('/login',
       failureFlash: true, // Optional: for flash messages
       successFlash: true // Optional: for flash messages
     }),
-    (req, res) => {
-      // Successful authentication
-      req.flash('success', 'Logged in successfully');
-
-      const pucchi = req.pucchi; // Retrieve from req object
-      delete req.session.pucchiBeforeAuth; // Clear from session
-
-
-      if (pucchi) {
-          res.redirect(pucchi);
-      } else {
-          res.redirect('/home');
-      }
-});
-
+    logicAfterLogin);
 
 
 // Logout route
-router.get('/logout', wrapAsync(async (req, res) => {
-    req.logout(err => {
-        if (err) {
-            next(err);
-        }
-        res.redirect('/home');
-    });
-}));
+router.get('/logout', wrapAsync(logoutUser));
 
 module.exports = router;
