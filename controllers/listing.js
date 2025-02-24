@@ -2,6 +2,7 @@ const Listing = require('../models/listing');
 const Review = require('../models/review');
 const ExpressError = require('../utils/ExpressError');
 
+
 module.exports.getAllListings = async (req, res) => {
     // res.send('add page');
     const listings = await Listing.find({});
@@ -56,12 +57,12 @@ module.exports.getAddNewListingForm = (req, res) => {
 }
 
 module.exports.AddNewListing = async (req, res) => {
-
-    // console.log(req.body);
-    // console.log(listingSchemaValidation);
+    console.log(req.file);
+    console.log(req.body);
 
     let { title, description, image, price, location, country } = req.body;
-    let newListing = new Listing({ title, description, image: { url: image }, price, location, country, owner: req.user._id });  
+    let newListing = new Listing({ title, description, image: { url: req.file.path,filename: req.file.filename }, price, location, country, owner: req.user._id }); 
+    
     await newListing.save();
     req.flash('success', 'Listing added successfully');
     res.redirect('/home');

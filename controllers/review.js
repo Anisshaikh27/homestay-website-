@@ -6,7 +6,7 @@ module.exports.addNewReview = async (req, res) => {
     if (!req.params.id) {
         throw new ExpressError(404, 'Listing not found ,bad request');
     }
-    // console.log(req.body);
+    console.log(req.body);
     let id = req.params.id;
     let {reviewRating,reviewText} = req.body;
 

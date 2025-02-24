@@ -1,3 +1,9 @@
+// loads environment variables from a .env file into process.env
+if (process.env.NODE_ENV !== 'production'){
+    require('dotenv').config();
+}
+
+
 const express = require('express');
 const app = express();
 

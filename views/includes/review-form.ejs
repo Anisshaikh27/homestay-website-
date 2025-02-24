@@ -11,29 +11,20 @@
   <div class="container mt-3">
 
     <form id="reviewForm" class="needs-validation" method="post" action="/home/details/<%= id %>/reviews" novalidate>
-      <div class="mb-3">
-        <label for="reviewRating" class="form-label">Rating</label><br>
-        <!-- 5 star pattern -->
-          <input class="form-check-input" type="radio" name="reviewRating" id="reviewRating1" value="1" required>
-          <label class="form-check-label" for="reviewRating1">1</label>
-
-          <input class="form-check-input" type="radio" name="reviewRating" id="reviewRating2" value="2" required>
-          <label class="form-check-label" for="reviewRating2">2</label>
-        
-          <input class="form-check-input" type="radio" name="reviewRating" id="reviewRating3" value="3" required>
-          <label class="form-check-label" for="reviewRating3">3</label>
-    
-          <input class="form-check-input" type="radio" name="reviewRating" id="reviewRating4" value="4" required>
-          <label class="form-check-label" for="reviewRating4">4</label>
-        
-          <input class="form-check-input" type="radio" name="reviewRating" id="reviewRating5" value="5" required>
-          <label class="form-check-label" for="reviewRating5">5</label>
-
-          <div class="invalid-feedback">
-            Please choose a rating
-          </div>
-
-      </div>
+      <fieldset class="starability-basic">
+        <legend>First rating:</legend>
+        <input type="radio" id="no-rate" class="input-no-rate" name="reviewRating" value="0" checked aria-label="No rating." />
+        <input type="radio" id="first-rate1" name="reviewRating" value="1" />
+        <label for="first-rate1" title="Terrible">1 star</label>
+        <input type="radio" id="first-rate2" name="reviewRating" value="2" />
+        <label for="first-rate2" title="Not good">2 stars</label>
+        <input type="radio" id="first-rate3" name="reviewRating" value="3" />
+        <label for="first-rate3" title="Average">3 stars</label>
+        <input type="radio" id="first-rate4" name="reviewRating" value="4" />
+        <label for="first-rate4" title="Very good">4 stars</label>
+        <input type="radio" id="first-rate5" name="reviewRating" value="5" />
+        <label for="first-rate5" title="Amazing">5 stars</label>
+      </fieldset>
       <div class="mb-3">
         <label for="reviewText" class="form-label">Your Review</label>
         <textarea name="reviewText" class="form-control" id="reviewText" rows="5" placeholder="Write your review..." required></textarea>

@@ -98,7 +98,8 @@
                     <div class="card  ">
                         <div class="card-body bg-light review-card gap-2 ms-2 ps-2 mb-3 pt-3 pb-3  ">
                             <p class="card-title"><strong>@<%= review.author.username %></strong></p>
-                            <p class="card-title"><strong>Rating: <%= review.rating %></strong></p>
+                            
+                            <p class="starability-result" data-rating="<%= review.rating %>"></p>
                             <p class="card-text"><%= review.body %></p>
                             <p class="card-text italic"><%= review.createdAt.toDateString() %></p>
                            

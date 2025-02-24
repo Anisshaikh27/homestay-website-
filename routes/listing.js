@@ -2,6 +2,14 @@
 const express = require('express');
 const router = express.Router();
 
+
+// for parsing multipart data from the form 
+const multer = require('multer');
+//after cloud configuration
+const { storage } = require('../cloudconfig');
+const upload = multer({ storage });
+
+ 
 // // importing models
 const Listing = require('../models/listing');
 
@@ -51,7 +59,7 @@ router.route('/add')
     // get form 
     .get(isLoggedIn, wrapAsync(getAddNewListingForm))
     //add listing
-    .post(validateListingSchema, wrapAsync(AddNewListing));
+    .post( upload.single('image'), validateListingSchema, wrapAsync(AddNewListing));
 
 
 // for deleting data 
