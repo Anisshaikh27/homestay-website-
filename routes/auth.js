@@ -28,10 +28,11 @@ router.get('/register', getRegisterForm );
 router.post('/register',validateUserSchema, wrapAsync(addNewUser));
 
 // Login route
-router.get('/login', getLoginForm);
+router.route('/login')
+    .get( getLoginForm)
 
-// Login route (SIMPLIFIED and CORRECTED)
-router.post('/login',
+    // Login route (SIMPLIFIED and CORRECTED)
+    .post(
     (req,res,next) => { // Middleware to retrieve before authentication
         const pucchi = req.session.pucchiBeforeAuth;
         req.pucchi = pucchi; // Put it on req so the next middleware can access it.

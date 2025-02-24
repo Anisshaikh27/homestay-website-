@@ -38,16 +38,20 @@ router.get(['/'], wrapAsync(getAllListings));
 router.get('/details/:id', wrapAsync(getListingDetails));
 
 // for edit details 
-router.get('/edit/:id',isLoggedIn,isOwner,wrapAsync(getEditForm));
 
-
-// now updating the details
-router.post('/edit/:id',isLoggedIn,isOwner,validateListingSchema, wrapAsync(updateListingDetails));
+router.route('/edit/:id')
+    // edit form
+    .get(isLoggedIn,isOwner,wrapAsync(getEditForm))
+    // now updating the details
+    .post(isLoggedIn,isOwner,validateListingSchema, wrapAsync(updateListingDetails));
 
 
 // for adding new data 
-router.get('/add',isLoggedIn, wrapAsync(getAddNewListingForm));
-router.post('/add',validateListingSchema, wrapAsync(AddNewListing));
+router.route('/add')
+    // get form 
+    .get(isLoggedIn, wrapAsync(getAddNewListingForm))
+    //add listing
+    .post(validateListingSchema, wrapAsync(AddNewListing));
 
 
 // for deleting data 
