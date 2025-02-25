@@ -51,7 +51,7 @@ router.route('/edit/:id')
     // edit form
     .get(isLoggedIn,isOwner,wrapAsync(getEditForm))
     // now updating the details
-    .post(isLoggedIn,isOwner,validateListingSchema, wrapAsync(updateListingDetails));
+    .post(isLoggedIn,isOwner,upload.single('image'),validateListingSchema, wrapAsync(updateListingDetails));
 
 
 // for adding new data 

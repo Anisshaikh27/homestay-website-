@@ -1,31 +1,75 @@
-body{
-    /* background-color: red; */
+/* custom font  */
+@font-face {
+    font-family: 'AirbnbCereal-W-Bd';
+    src: url('../fonts/AirbnbCereal_W_Bd.otf') format('opentype');
+    font-weight: bold; /* or 700 */
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'AirbnbCereal-W-Bk';
+    src: url('../fonts/AirbnbCereal_W_Bk.otf') format('opentype');
+    font-weight: black; /* or 900 */
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'AirbnbCereal-W-BIk';
+    src: url('../fonts/AirbnbCereal_W_BIk.otf') format('opentype');
+    font-weight: bolder; /* or 800-900 */
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'AirbnbCereal-W-Lt';
+    src: url('../fonts/AirbnbCereal_W_Lt.otf') format('opentype');
+    font-weight: lighter; /* or 300 */
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'AirbnbCereal-W-Md';
+    src: url('../fonts/AirbnbCereal_W_Md.otf') format('opentype');
+    font-weight: medium; /* or 500 */
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'AirbnbCereal-W-XBd';
+    src: url('../fonts/AirbnbCereal_W_XBd.otf') format('opentype');
+    font-weight: 800; /* or extra-bold */
+    font-style: normal;
+}
+
+
+body {
+    font-family: 'AirbnbCereal-W-Bd','AirbnbCereal-W-Md','AirbnbCereal-W-Lt', sans-serif; /* Add a fallback font */
     color: black;
 }
 
 /* navbar */
 .navbar{
     height: 5rem;
-    /* background-color: rgba(78, 90, 7, 0.436) !important; */
-    /* should not be transparent */
-    /* opacity: 0 !important; */
-   
-    background-color: #499ed7 !important;
+    background-color: white;
+    font-family: 'AirbnbCereal-W-Md', sans-serif;
+    line-height: 20px;
+    /* background-color: #499ed7 !important; */
 
       
 }
 
 /* icon */
 .fa-airbnb {
-    font-size: 3rem;
-    color: white;
+    font-size: 2.5rem;
+    color: red;
 }
 
 /* nav links */
 .nav-link{
     color: black !important;
-    font-size: 1rem !important;
-    font-weight: bold !important;
+    font-size: 16px !important;
+    line-height: 20px !important;
+    
 }
 
 /* footer */
@@ -79,11 +123,13 @@ f-info-links{
 
 .card-body{
     padding: 0px !important;
+    margin: 3px 3px 3px 3px;
 
 }
 
 .card-text{
-    font-weight: 400 !important;
+    font-family: 'AirbnbCereal-W-Lt', sans-serif;
+
 }
 .card img {
     opacity:1;
@@ -98,19 +144,18 @@ f-info-links{
     margin-left: 0%;
   }
 
-.card-body{
-    margin: 3px 3px 3px 3px;
-}
+
+
 
 /* goggle font */
-body{
+/* body{
   font-family: "Space Grotesk", serif !important ;
   font-optical-sizing: auto;
   font-weight: 400 !important;
   font-style: normal;
   font-size: 1rem;
   line-height: 1.5 !important;
-}
+} */
 
 .listing-underlines{
     text-decoration: none !important;
@@ -119,7 +164,4 @@ body{
 p{
     margin: 0 !important;
 }
-
-
-
 

@@ -47,7 +47,12 @@ module.exports.updateListingDetails = async(req,res)=>{
     // console.log(req.body);
     let {title,description,price,location,country} = req.body;
     
-    await Listing.findByIdAndUpdate(req.params.id,{title:title,description:description,price:price,location:location,country:country},{runValidators:true}); 
+    let updatedListing = await Listing.findByIdAndUpdate(req.params.id,{title:title,description:description,price:price,location:location,country:country},{runValidators:true}); 
+    if (typeof req.file !== 'undefined') {
+        updatedListing.image.url = req.file.path;
+        updatedListing.image.filename = req.file.filename;
+        await updatedListing.save();
+    }
     req.flash('success', 'Listing updated successfully');
     res.redirect('/home');
 }

@@ -4,7 +4,7 @@
       <h3><strong> Edit Listing </strong></h3>
       <div class="row mt-5">
         <div class="col-8 offset-2">
-            <form action="/home/edit/<%= result._id  %>" method="POST" class="needs-validation" novalidate>
+            <form action="/home/edit/<%= result._id  %>" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="title" class="form-label">Title:</label>
                     <input class="form-control" type="text" id="title" name="title" value="<%= result.title %> " required><br>
@@ -20,10 +20,17 @@
                         Please write a description
                     </div>
                 </div>
+                <br>
+
+                <!-- original image preview -->
+                 <div>
+                    original image preview <br>
+                     <img src="<%= result.image.url %>" alt="Listing image" width="100" height="100">
+                 </div>
                 
                 <div class="form-group">
                     <label for="image" class="form-label">Image:</label>
-                    <input class="form-control" type="url" id="image" name="image" value="<%= result.image.url %> " required><br>
+                    <input class="form-control" type="file" id="image" name="image"  ><br>
                 </div>
 
                 
