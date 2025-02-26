@@ -1,35 +1,62 @@
+<style>
+  .navbar-search {
+     
+      margin-left: 150px;
+
+  }
+  .navbar-search input {
+    border-radius: 20px !important;
+    padding: 5px;
+  }
+  .navbar-search button {
+    border-radius: 20px !important;
+    background-color: 
+    rgb(255, 56, 92) !important;
+    
+  }
+
+  .navbar-search button i {
+    font-size: smaller !important;
+  }
+
+  .navbar-search button :hover {
+    /* animate button on hover */
+    transform: scale(1.1);
+    transition: transform 0.2s ease-in-out;
+    
+  }
+  
+</style>
+
 <nav class="navbar navbar-expand-md border-bottom sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand d-flex align-items-center ms-2" href="/home">
-      <i class="fa-brands fa-airbnb"></i>
-      <span class="ms-2 fs-1.5">airbnb</span>
-    </a>
+      <a class="navbar-brand d-flex align-items-center ms-2" href="/home">
+          <i class="fa-brands fa-airbnb"></i>
+          <span class="ms-2 fs-1.5">airbnb</span>
+      </a>
 
-    <form class="d-flex ms-auto" role="search">
-      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success" type="submit">Search</button>
-    </form>
-    
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav me-auto">
-        
-       
-        <!-- <a class="nav-link disabled" href="/home/about">About</a> -->
+      <div class="d-flex justify-content-center flex-grow-1 navbar-search">
+          <form class="d-flex" role="search">
+              <input class="form-control me-2 p-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+          </form>
       </div>
-      <div class="navbar-nav ms-auto">
-        <a class="nav-link active" href="/home/add">Add your home</a>
-        <% if(!currentUser){ %>
-          <a class="nav-link active" href="/auth/login"><strong>Login</strong></a>
-          <a class="nav-link active" href="/auth/register"><strong>Sign up</strong></a>
-        <% } %>
-        <% if(currentUser){ %>
-          <a class="nav-link active" href="/auth/profile"><i class="fa-solid fa-user"></i></a>
-          <a class="nav-link active" href="/auth/logout">Logout</a>
-        <% } %>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav ms-auto">
+              <a class="nav-link active" href="/home/add">Add your home</a>
+              <% if(!currentUser){ %>
+                  <a class="nav-link active" href="/auth/login"><strong>Login</strong></a>
+                  <a class="nav-link active" href="/auth/register"><strong>Sign up</strong></a>
+              <% } %>
+              <% if(currentUser){ %>
+                  <a class="nav-link active" href="/auth/profile"><i class="fa-solid fa-user"></i></a>
+                  <a class="nav-link active" href="/auth/logout">Logout</a>
+              <% } %>
+          </div>
       </div>
-    </div>
   </div>
 </nav>

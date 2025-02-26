@@ -12,6 +12,10 @@
         opacity: 0.6;
     }
 
+    .filter p {
+        font-size: 12px;
+    }
+
     .filter:hover {
         opacity: 1;
     }
@@ -35,7 +39,7 @@
 <body>
     <main>
         <div class="row mt-3">
-            <div class="d-flex align-items-center flex-grow-1">
+            <div class="row-col-lg-7 d-flex align-items-center flex-grow-1">
             <button class=" btn filter scroll-button me-2" id="scroll-left">
                 <i class="fa-solid fa-arrow-left"></i>
             </button>
@@ -137,7 +141,7 @@
                 <i class="fa-solid fa-arrow-right"></i>
             </button>
        
-            <div class="toggle-btn ms-auto border border-primary rounded p-2">
+            <div class="toggle-btn ms-5 border border-primary rounded p-2">
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
                     <label class="form-check-label" for="flexSwitchCheckDefault"> + include taxes</label>
@@ -151,13 +155,13 @@
             <% listings.forEach((listing) => { %>
                 <a href="/home/details/<%= listing._id %>" class="listing-underlines">
                     <div class="card  ">
-                        <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>" style="height: 20rem;">
+                        <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>" style="height: 200px;">
                         <div class="card-body">
                             <h5 class="card-title"><strong><%= listing.title %></strong></h5>
                             <span class="card-text"><%= listing.location %></span>,
                             <span class="card-text"><%= listing.country %></span>
-                            <p class="card-text"> <%= listing.description%></p>
-                            <p class="card-text " style="font-style: italic;"> Price: $<%= listing.price %>/night</p>
+                            
+                            <p class="card-text " id="price" style="font-style: italic;"> Price: $<%= listing.price %>/night</p>
                         </div>
                     </div>
                 </a>
@@ -177,5 +181,24 @@
         scrollRightButton.addEventListener('click', () => {
             filterContainer.scrollLeft += 100; // Adjust scroll amount as needed
         });
+
+        const toggleSwitch = document.getElementById('flexSwitchCheckDefault');
+        toggleSwitch.addEventListener('change', () => {
+            const priceElements = document.querySelectorAll('#price');
+            priceElements.forEach(priceElement => {
+                let priceText = priceElement.textContent;
+                let priceValue = parseFloat(priceText.replace('Price: $', '').replace('/night', ''));
+                
+
+                if (toggleSwitch.checked) {
+                    let newPrice = priceValue + priceValue * 0.18;
+                    priceElement.textContent = `Price: ${newPrice}/night (18% taxes included)`;
+                } 
+                else{
+                    priceElement.textContent = `Price: ${priceValue}/night (18% taxes included)`;
+                }
+            });
+        });
+          
     </script>
 </body>
