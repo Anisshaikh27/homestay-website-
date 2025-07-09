@@ -10,13 +10,13 @@ const app = express();
 const path = require('path');
 
 // connecting to db
-const { connectDB, deleteData, insertdata } = require('./init/connectDB');
+const { connectDB,store } = require('./init/connectDB');
 
 // Connect to DB and initialize data
 (async () => {
     await connectDB();
-    await deleteData();
-    await insertdata();
+    // await deleteData();
+    // await insertdata();
 })();
 
 // importing ExpressError class for custom error handling
@@ -42,20 +42,21 @@ app.use(express.urlencoded({ extended: true }));
 // Parse JSON bodies (for API clients)
 app.use(express.json());
 
-//express sessions
+// //express sessions
 const session = require('express-session');
 
 const sessionOptions= {
-    secret: 'mysupersecretcode',
+    store,
+    secret: process.env.SECRET,
+
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
         httpOnly: true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
 };
-
 app.use(session(sessionOptions));
 
 // flash messages

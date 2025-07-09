@@ -161,7 +161,7 @@
                             <span class="card-text"><%= listing.location %></span>,
                             <span class="card-text"><%= listing.country %></span>
                             
-                            <p class="card-text " id="price" style="font-style: italic;"> Price: $<%= listing.price %>/night</p>
+                            <p class="card-text " id="price" data-price="<%= listing.price %> " style="font-style: italic;"> Price: $<%= listing.price %>/night</p>
                         </div>
                     </div>
                 </a>
@@ -186,19 +186,16 @@
         toggleSwitch.addEventListener('change', () => {
             const priceElements = document.querySelectorAll('#price');
             priceElements.forEach(priceElement => {
-                let priceText = priceElement.textContent;
-                let priceValue = parseFloat(priceText.replace('Price: $', '').replace('/night', ''));
+                const basePrice = parseFloat(priceElement.getAttribute('data-price'));
                 
-
                 if (toggleSwitch.checked) {
-                    let newPrice = priceValue + priceValue * 0.18;
-                    priceElement.textContent = `Price: ${newPrice}/night (18% taxes included)`;
-                } 
-                else{
-                    priceElement.textContent = `Price: ${priceValue}/night (18% taxes included)`;
+                    const newPrice = basePrice + basePrice * 0.18;
+                    priceElement.textContent = `Price: $${newPrice.toFixed(2)}/night (18% taxes included)`;
+                } else {
+                    priceElement.textContent = `Price: $${basePrice.toFixed(2)}/night`;
                 }
             });
         });
-          
+
     </script>
 </body>
