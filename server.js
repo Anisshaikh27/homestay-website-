@@ -10,13 +10,13 @@ const app = express();
 const path = require('path');
 
 // connecting to db
-const { connectDB,store } = require('./init/connectDB');
+const { connectDB,insertdata,store } = require('./init/connectDB');
 
 // Connect to DB and initialize data
 (async () => {
     await connectDB();
     // await deleteData();
-    // await insertdata();
+    await insertdata();
 })();
 
 // importing ExpressError class for custom error handling

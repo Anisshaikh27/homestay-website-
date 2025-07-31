@@ -33,17 +33,17 @@ const { storage } = require('../cloudconfig');
 
 
 // inserting data into db using function
-// async function insertdata() {
-//     try {
-//         // mapping an owner to each listing
-//         data = data.map((listing) => ({...listing, owner :'67b4bcefc092b1ea23d9d9ef'})); 
-//         await Listing.insertMany(data);
-//         console.log('Sample data inserted successfully.');
+async function insertdata() {
+    try {
+        // mapping an owner to each listing
+        data = data.map((listing) => ({...listing, owner :'67b4bcefc092b1ea23d9d9ef'})); 
+        await Listing.insertMany(data);
+        console.log('Sample data inserted successfully.');
 
-//         } catch (error) {
-//         console.error('Error generating sample data:', error);
-//         }
-// }; 
+        } catch (error) {
+        console.error('Error generating sample data:', error);
+        }
+}; 
 
 // deleting previous data
 //  async function deleteData() {
@@ -56,5 +56,5 @@ const { storage } = require('../cloudconfig');
 //     }
 // }
 
-module.exports = { connectDB,store};
+module.exports = { connectDB,insertdata,store};
 
