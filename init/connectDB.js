@@ -27,23 +27,59 @@ store.on('error', function (e) {
 
 // importing models
 const Listing = require('../models/listing');
+
 let data = require('./TouristPlacesDataset');
 const Review = require('../models/review');
+const User = require('../models/user');
 const { storage } = require('../cloudconfig');
 
 
-// inserting data into db using function
-async function insertdata() {
-    try {
-        // mapping an owner to each listing
-        data = data.map((listing) => ({...listing, owner :'67b4bcefc092b1ea23d9d9ef'})); 
-        await Listing.insertMany(data);
-        console.log('Sample data inserted successfully.');
 
-        } catch (error) {
-        console.error('Error generating sample data:', error);
-        }
-}; 
+async function insertData() {
+  try {
+    // 1. Check if 'admin' user already exists
+    let user = await User.findOne({ username: 'admin' });
+
+    if (!user) {
+      const newUser = new User({ username: 'admin', email: 'admin@gmail.com' });
+      user = await User.register(newUser, 'admin');
+      console.log('Admin user created!');
+    } else {
+      console.log('Admin user already exists.');
+    }
+
+    // 2. Only insert listings if none exist
+    const existingListings = await Listing.find({});
+    if (existingListings.length === 0) {
+      const updatedData = data.map(listing => ({
+        ...listing,
+        owner: user._id
+      }));
+      await Listing.insertMany(updatedData);
+      console.log('Sample listings inserted.');
+    } else {
+      console.log('Listings already exist. Skipping insert.');
+    }
+
+  } catch (error) {
+    console.error('Error inserting data:', error);
+  }
+}
+
+
+// // inserting data into db using function
+// async function insertdata() {
+//     try {
+//         // mapping an owner to each listing
+//         data = data.map((listing) => ({...listing, owner :'67b4bcefc092b1ea23d9d9ef'})); 
+//         await Listing.insertMany(data);
+       
+//         console.log('Sample data inserted successfully.');
+
+//         } catch (error) {
+//         console.error('Error generating sample data:', error);
+//         }
+// }; 
 
 // deleting previous data
 //  async function deleteData() {
@@ -56,5 +92,5 @@ async function insertdata() {
 //     }
 // }
 
-module.exports = { connectDB,insertdata,store};
+module.exports = { connectDB,insertData,store};
 
